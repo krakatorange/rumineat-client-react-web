@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   helper_method :current_user
+  before_action :authenticate
 
   def authenticate
     redirect_to '/' unless user_signed_in?
