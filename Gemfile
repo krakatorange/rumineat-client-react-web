@@ -57,3 +57,6 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 # For username generation
 gem 'haikunator'
+
+# For sessions
+gem 'activerecord-session_store'

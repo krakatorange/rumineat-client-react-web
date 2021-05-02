@@ -5,7 +5,7 @@ import SessionCreate from "../components/SessionCreate";
 export default (
   <Router>
     <Switch>
-      <Route path="/test" exact component={SessionCreate} />
+      <Route path="/create" exact component={SessionCreate} />
     </Switch>
   </Router>
 );
