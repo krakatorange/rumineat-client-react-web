@@ -21,7 +21,10 @@ class SessionController < ApplicationController
         if @session.save!
           @user.session = @session
           if @user.save!
-            render json: {success: true}, status: :ok
+            session[:user_id] = @user.id
+            render json: {
+              success: true
+            }, status: :ok
             return
           end
         end
@@ -29,5 +32,11 @@ class SessionController < ApplicationController
         render json: {success: false, message: 'Error creating session'}, status: :internal_server_error
       end
     end
+  end
+
+  def join
+    render json: {
+      user: current_user.id
+    }
   end
 end
