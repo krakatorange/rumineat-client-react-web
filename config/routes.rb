@@ -8,6 +8,8 @@ Rails.application.routes.draw do
     end
   end
 
+  root :to => redirect('/splash')
+
   # This needs to be the last route in this file!
   match '*path', to: 'pages#home', via: :all
 end
