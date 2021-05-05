@@ -1,6 +1,6 @@
 class SessionController < ApplicationController
   skip_before_action :verify_authenticity_token
-  skip_before_action :authenticate, only: :create
+  skip_before_action :authenticate, only: [:create, :join]
   PRICE_LEVEL_MAP = {
     '$' => '1',
     '$$' => '2',

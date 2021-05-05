@@ -1,7 +1,7 @@
 import React from 'react';
 import {Button, Header, Menu} from "grommet";
 import { Map, GoogleApiWrapper } from 'google-maps-react';
-import {Component} from "react/cjs/react.production.min";
+import {Component} from "react";
 
 const mapStyles = {
     width: '100%',

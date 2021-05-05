@@ -60,3 +60,5 @@ gem 'haikunator'
 
 # For sessions
 gem 'activerecord-session_store'
+
+gem 'rack-cors'
