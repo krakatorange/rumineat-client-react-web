@@ -62,6 +62,12 @@ gem 'haikunator'
 gem 'activerecord-session_store'
 
 gem 'rack-cors'
+gem 'httparty'
+
+# For tag relationship
+gem 'acts-as-taggable-on', '~> 7.0'
 
 # For Active Storage
 gem 'aws-sdk-s3', require: false
+
+
