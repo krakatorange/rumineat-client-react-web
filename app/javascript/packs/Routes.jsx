@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
       <Switch>
         <Route path="/splash" exact component={Splash} />
         <Route path="/create" exact component={SessionCreate} />
-          <Route path="/join" exact component={SessionJoin} />
+        <Route path="/join" exact component={SessionJoin} />
       </Switch>
     </Router>,
     document.body.appendChild(document.createElement("div"))
