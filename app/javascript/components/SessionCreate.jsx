@@ -2,6 +2,8 @@ import React, { Component, useState, useEffect } from 'react';
 import GoogleMapReact from 'google-map-react';
 import { Button, Header, Menu, RadioButtonGroup, RangeInput, Box, Stack } from 'grommet';
 import { CaretDown } from 'grommet-icons';
+import useAxios from "axios-hooks";
+import {API_PATH} from "./Env";
 
 const GOOGLE_MAPS_API_KEY = 'AIzaSyAod0cGZKbMQTFQ60ALXcSqp8aIeZofoy4';
 const GOOGLE_MAPS_BASE_URI = 'https://www.googleapis.com/geolocation/v1/geolocate?key=';
@@ -18,6 +20,15 @@ function SessionCreate() {
         console.log("useEffect items loaded");
         getLocation();
     }, [currentLocation, center]);
+
+    const [{ data, loading, requestError, response}, createSessionRequest] = useAxios({
+            url: `${API_PATH}/create`,
+            method: 'POST'
+        },
+        {
+            manual: true
+        }
+    )
 
     function success(position) {
         console.log('Geolocation received!');
@@ -52,49 +63,6 @@ function SessionCreate() {
         }).then = (response) => {
             console.log("hello");
             success({ lat: response.location.lat, lng: response.location.lng });
-        }
-    };
-
-    async function createUserAndSession(latitude, longitude) {
-        console.log("latitude: " + latitude);
-        console.log("longitude: " + longitude);
-        
-        setButtonDisabled(true);
-        let result = false;
-        let errorMessage = 'Unknown error';
-        await Api.createUserAndSession(latitude, longitude, rangeValue, priceLevel)
-            .then(function (response) {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    return false
-                }
-            })
-            .then(function (jsonResponse) {
-                if (jsonResponse) {
-                    console.log(JSON.stringify(jsonResponse));
-                    const token = jsonResponse.token;
-                    JwtUtil.setToken(token);
-                    result = true;
-                } else {
-                    result = false;
-                }
-            })
-            .catch(function (error) {
-                result = false;
-                errorMessage = 'Failed to create session';
-            });
-
-        if (result) {
-            setButtonDisabled(false);
-            this.props.history.push({
-                pathname: "/sessionjoin"
-            })
-        } else {
-            setButtonDisabled(false);
-            toast.error(errorMessage, {
-                position: toast.POSITION.TOP_CENTER
-            });
         }
     };
 
@@ -191,9 +159,14 @@ function SessionCreate() {
                 <Button
                     label={buttonDisabled ? 'Loading...' : "Start a group decision"}
                     disabled={buttonDisabled}
-                    onClick={() => {
-                        createUserAndSession(center.lat, center.lng)
-                    }}
+                    onClick={() => {createSessionRequest({
+                        data: {
+                            latitude: currentLocation.lat,
+                            longitude: currentLocation.lng,
+                            price_range: priceLevel,
+                            range: rangeValue
+                        }}
+                    )}}
                     primary={true}
                 />
             </div>

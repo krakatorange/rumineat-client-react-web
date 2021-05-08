@@ -62,3 +62,6 @@ gem 'haikunator'
 gem 'activerecord-session_store'
 
 gem 'rack-cors'
+
+# For Active Storage
+gem 'aws-sdk-s3', require: false
