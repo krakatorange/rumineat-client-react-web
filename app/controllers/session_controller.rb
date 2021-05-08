@@ -13,6 +13,7 @@ class SessionController < ApplicationController
     @session.latitude = params[:latitude]
     @session.longitude = params[:longitude]
     @session.range = params[:range]
+    @session.price_level = PRICE_LEVEL_MAP.fetch(params[:price_level], '2')
 
     @user = User.new
     @user.username =  Haikunator.haikunate(9999) # generate username

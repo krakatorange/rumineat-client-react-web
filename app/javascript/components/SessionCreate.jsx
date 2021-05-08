@@ -2,6 +2,8 @@ import React, { Component, useState, useEffect, useRef } from 'react';
 import GoogleMapReact from 'google-map-react';
 import { Button, Header, Menu, RadioButtonGroup, RangeInput, Box, Stack } from 'grommet';
 import { CaretDown } from 'grommet-icons';
+import useAxios from "axios-hooks";
+import {API_PATH} from "./Env";
 
 const GOOGLE_MAPS_API_KEY = 'AIzaSyAod0cGZKbMQTFQ60ALXcSqp8aIeZofoy4';
 const GOOGLE_MAPS_BASE_URI = 'https://www.googleapis.com/geolocation/v1/geolocate?key=';
@@ -19,6 +21,15 @@ function SessionCreate() {
         console.log("useEffect items loaded");
         getLocation();
     }, [currentLocation]);
+
+    const [{ data, loading, requestError, response}, createSessionRequest] = useAxios({
+            url: `${API_PATH}/create`,
+            method: 'POST'
+        },
+        {
+            manual: true
+        }
+    )
 
     function success(position) {
         console.log('Geolocation received!');
@@ -193,9 +204,14 @@ function SessionCreate() {
                 <Button
                     label={buttonDisabled ? 'Loading...' : "Start a group decision"}
                     disabled={buttonDisabled}
-                    onClick={() => {
-                        createUserAndSession(currentLocation.lat, currentLocation.lng)
-                    }}
+                    onClick={() => {createSessionRequest({
+                        data: {
+                            latitude: currentLocation.lat,
+                            longitude: currentLocation.lng,
+                            price_range: priceLevel,
+                            range: rangeValue
+                        }}
+                    )}}
                     primary={true}
                 />
             </div>
