@@ -1,6 +1,7 @@
 class Place < ApplicationRecord
   belongs_to :session
   has_one_attached :image
+  has_many :votes
 
   acts_as_taggable_on :types
 
