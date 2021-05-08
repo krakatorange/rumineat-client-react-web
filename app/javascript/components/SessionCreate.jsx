@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { Component, useState, useEffect, useRef } from 'react';
 import GoogleMapReact from 'google-map-react';
 import { Button, Header, Menu, RadioButtonGroup, RangeInput, Box, Stack } from 'grommet';
 import { CaretDown } from 'grommet-icons';
@@ -13,6 +13,7 @@ function SessionCreate() {
     const [priceLevel, setPriceLevel] = useState('$$');
     const [currentLocation, setCurrentLocation] = useState({});
     const [markerCenter, setMarkerCenter] = useState(null);
+    const refMap = useRef(null);
 
     useEffect(() => {
         console.log("useEffect items loaded");
