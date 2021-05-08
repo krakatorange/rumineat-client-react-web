@@ -69,48 +69,6 @@ function SessionCreate() {
         }
     };
 
-    async function createUserAndSession(latitude, longitude) {
-        console.log("latitude: " + latitude);
-        console.log("longitude: " + longitude);
-        setButtonDisabled(true);
-        let result = false;
-        let errorMessage = 'Unknown error';
-        await Api.createUserAndSession(latitude, longitude, rangeValue, priceLevel)
-            .then(function (response) {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    return false
-                }
-            })
-            .then(function (jsonResponse) {
-                if (jsonResponse) {
-                    console.log(JSON.stringify(jsonResponse));
-                    const token = jsonResponse.token;
-                    JwtUtil.setToken(token);
-                    result = true;
-                } else {
-                    result = false;
-                }
-            })
-            .catch(function (error) {
-                result = false;
-                errorMessage = 'Failed to create session';
-            });
-
-        if (result) {
-            setButtonDisabled(false);
-            this.props.history.push({
-                pathname: "/sessionjoin"
-            })
-        } else {
-            setButtonDisabled(false);
-            toast.error(errorMessage, {
-                position: toast.POSITION.TOP_CENTER
-            });
-        }
-    };
-
     const rangeMap = {
         0: 1,
         1: 2,
