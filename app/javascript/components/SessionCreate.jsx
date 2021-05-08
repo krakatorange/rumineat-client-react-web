@@ -161,8 +161,8 @@ function SessionCreate() {
                     disabled={buttonDisabled}
                     onClick={() => {createSessionRequest({
                         data: {
-                            latitude: currentLocation.lat,
-                            longitude: currentLocation.lng,
+                            latitude: center.lat,
+                            longitude: center.lng,
                             price_range: priceLevel,
                             range: rangeValue
                         }}
