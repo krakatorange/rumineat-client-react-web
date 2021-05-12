@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect, useRef } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import GoogleMapReact from 'google-map-react';
 import { Button, Header, Menu, RadioButtonGroup, RangeInput, Box, Stack } from 'grommet';
 import { CaretDown } from 'grommet-icons';
@@ -14,13 +14,12 @@ function SessionCreate() {
     const [rangeValue, setRangeValue] = useState(5);
     const [priceLevel, setPriceLevel] = useState('$$');
     const [currentLocation, setCurrentLocation] = useState({});
-    const [markerCenter, setMarkerCenter] = useState(null);
-    const refMap = useRef(null);
+    const [center, setCenter] = useState({});
 
     useEffect(() => {
         console.log("useEffect items loaded");
         getLocation();
-    }, [currentLocation]);
+    }, [currentLocation, center]);
 
     const [{ data, loading, requestError, response}, createSessionRequest] = useAxios({
             url: `${API_PATH}/create`,
@@ -33,16 +32,14 @@ function SessionCreate() {
 
     function success(position) {
         console.log('Geolocation received!');
-        console.log(position);
 
         let data = {
             lat: position.coords.latitude,
             lng: position.coords.longitude
         }
 
-        setCurrentLocation({...currentLocation, ...data})
-
-        console.log(currentLocation);
+        setCurrentLocation({...currentLocation, ...data});
+        setCenter({...currentLocation, ...data});
     };
 
     function error() {
@@ -50,7 +47,7 @@ function SessionCreate() {
         tryAPIGeolocation();
     };
 
-    async function getLocation() {
+    function getLocation() {
         if (!navigator.geolocation) {
             console.log('Geolocation isnt supported on this device'); //#TODO: show some sort of toast
         } else {
@@ -65,7 +62,7 @@ function SessionCreate() {
             method: "POST",
         }).then = (response) => {
             console.log("hello");
-            success({lat: response.location.lat, lng: response.location.lng})
+            success({ lat: response.location.lat, lng: response.location.lng });
         }
     };
 
@@ -90,28 +87,34 @@ function SessionCreate() {
         setRangeValue(new_value);
     };
 
-    function ModelsMap(map, maps) {
-        //instantiate array that will hold your Json Data
-        let dataArray = [];
+    function InitMap(map, maps) {
+        let data = {
+            id: 'center',
+            position: { lat: currentLocation.lat, lng: currentLocation.lng },
+        };
 
-        let data = [];
-
-        //push your Json Data in the array
-        data.map((markerJson) => dataArray.push(markerJson));
-
-        //Loop through the dataArray to create a marker per data using the coordinates in the json
-        for (let i = 0; i < dataArray.length; i++) {
-            let marker = new maps.Marker({
-            position: { lat: dataArray[i].lat, lng: dataArray[i].lng },
+        let marker = new maps.Marker({
+            position: data.position,
             map,
-            label: dataArray[i].id,
-            });
-        }
-    };
+            label: data.id,
+        });
 
-    function handleBoundsChanged() {
-        const mapCenter = refMap.current.getCenter(); //get map center
-        setMarkerCenter(mapCenter);
+        maps.event.addListener(map,'center_changed', function() {
+            setCenter({ lat: map.getCenter().lat(), lng: map.getCenter().lng() });
+            //console.log(center);
+        });
+
+        //const coords = new maps.LatLngBounds(
+        //    new maps.LatLng(center.lat, center.lng),
+       //     new maps.LatLng(center.lat + 20, center.lng + 20)
+       // );
+
+        //const srcImage =
+        //"https://developers.google.com/maps/documentation/" +
+        //"javascript/examples/full/images/talkeetna.png";
+
+        //const overlay = new maps.OverlayView(coords, srcImage);
+        //overlay.setMap(map);
     };
 
     return (
@@ -126,14 +129,8 @@ function SessionCreate() {
                 center={{lat: currentLocation.lat, lng: currentLocation.lng}}
                 defaultZoom={10}
                 yesIWantToUseGoogleMapApiInternals
-                onGoogleApiLoaded={({ map, maps }) => ModelsMap(map, maps)}
-                ref={refMap}
-                onBoundsChanged={handleBoundsChanged}
+                onGoogleApiLoaded={({ map, maps }) => InitMap(map, maps)}
             >
-                <CaretDown
-                    color='brand'
-                    position={markerCenter}
-                />
             </GoogleMapReact>
             </div>    
 
@@ -164,8 +161,8 @@ function SessionCreate() {
                     disabled={buttonDisabled}
                     onClick={() => {createSessionRequest({
                         data: {
-                            latitude: currentLocation.lat,
-                            longitude: currentLocation.lng,
+                            latitude: center.lat,
+                            longitude: center.lng,
                             price_range: priceLevel,
                             range: rangeValue
                         }}
