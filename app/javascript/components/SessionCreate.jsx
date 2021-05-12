@@ -96,51 +96,32 @@ function SessionCreate() {
     };
 
     function InitMap(map, maps) {
-        let data = {
-            id: 'center',
-            position: { lat: currentLocation.lat, lng: currentLocation.lng },
-        };
-
-        let marker = new maps.Marker({
-            position: data.position,
-            map,
-            label: data.id,
-        });
-
         maps.event.addListener(map,'center_changed', function() {
             setCenter({ lat: map.getCenter().lat(), lng: map.getCenter().lng() });
             //console.log(center);
         });
-
-        //const coords = new maps.LatLngBounds(
-        //    new maps.LatLng(center.lat, center.lng),
-       //     new maps.LatLng(center.lat + 20, center.lng + 20)
-       // );
-
-        //const srcImage =
-        //"https://developers.google.com/maps/documentation/" +
-        //"javascript/examples/full/images/talkeetna.png";
-
-        //const overlay = new maps.OverlayView(coords, srcImage);
-        //overlay.setMap(map);
     };
 
     return (
         <Box>
             <span style={{"marginTop": "2%"}}/>
             <div className={"focus-content-box"}>
-            <div style={{ height: "400px", width: "100%" }}>
-            
-            <GoogleMapReact
-                bootstrapURLKeys={{ key: GOOGLE_MAPS_API_KEY }}
-                defaultCenter={{ lat: 40.756795, lng: -73.954298 }}
-                center={{lat: currentLocation.lat, lng: currentLocation.lng}}
-                defaultZoom={10}
-                yesIWantToUseGoogleMapApiInternals
-                onGoogleApiLoaded={({ map, maps }) => InitMap(map, maps)}
-            >
-            </GoogleMapReact>
-            </div>    
+
+            <Stack anchor="center">         
+                <div style={{ height: "400px", width: "100%" }}>    
+                    <GoogleMapReact
+                        bootstrapURLKeys={{ key: GOOGLE_MAPS_API_KEY }}
+                        defaultCenter={{ lat: 40.756795, lng: -73.954298 }}
+                        center={{lat: currentLocation.lat, lng: currentLocation.lng}}
+                        defaultZoom={10}
+                        yesIWantToUseGoogleMapApiInternals
+                        onGoogleApiLoaded={({ map, maps }) => InitMap(map, maps)}
+                    >
+                    </GoogleMapReact>    
+                </div>    
+                <CaretDown color='brand' />
+            </Stack>
+
 
             <div className={"inner-focus-padding"}>Max Distance: <span
                 style={{"textAlign": "right"}}>{rangeValue} mi</span></div>
@@ -167,14 +148,17 @@ function SessionCreate() {
                 <Button
                     label={buttonDisabled ? 'Loading...' : "Start a group decision"}
                     disabled={buttonDisabled}
-                    onClick={() => {createSessionRequest({
-                        data: {
-                            latitude: center.lat,
-                            longitude: center.lng,
-                            price_range: priceLevel,
-                            range: rangeValue
-                        }}
-                    )}}
+                    onClick={() => { 
+                        createSessionRequest({
+                            data: {
+                                latitude: center.lat,
+                                longitude: center.lng,
+                                price_range: priceLevel,
+                                range: rangeValue
+                            }
+                        });
+                        setButtonDisabled(true);
+                    }}
                     primary={true}
                 />
             </div>
