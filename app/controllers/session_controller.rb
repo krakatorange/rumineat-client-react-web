@@ -7,6 +7,15 @@ class SessionController < ApplicationController
     '$$$' => '3'
   }.freeze
 
+  def details
+    data = {}
+    @session = current_user.session
+    data[:users] = @session.users.count
+    data[:places] = @session.places.count
+    data[:places_fetched] = false # TODO
+    render json: data, status: :ok
+  end
+
   def create
     @session = Session.new
     @session.access_code = SecureRandom.uuid.to_s
@@ -18,22 +27,26 @@ class SessionController < ApplicationController
     @user = User.new
     @user.username =  Haikunator.haikunate(9999) # generate username
     @user.signature = '' # generate signature
+
+    success = false
     ActiveRecord::Base.transaction do
       begin
         if @session.save!
           @user.session = @session
           if @user.save!
-            session[:user_id] = @user.id
-            render json: {
-              success: true
-            }, status: :ok
-            return
+            success = true
           end
         end
       rescue => _e
-        render json: {success: false, message: 'Error creating session'}, status: :internal_server_error
+        logger.error("Error creating session #{_e}")
       end
     end
+
+    session[:user_id] = @user.id if success
+    render json: {
+      success: success,
+      message: success ? "Successfully created session" : "Error creating session"
+    }, status: :ok
   end
 
   def join

@@ -4,6 +4,7 @@ import { Button, Header, Menu, RadioButtonGroup, RangeInput, Box, Stack } from '
 import { CaretDown } from 'grommet-icons';
 import useAxios from "axios-hooks";
 import {API_PATH} from "./Env";
+import {useHistory} from "react-router";
 
 const GOOGLE_MAPS_API_KEY = 'AIzaSyAod0cGZKbMQTFQ60ALXcSqp8aIeZofoy4';
 const GOOGLE_MAPS_BASE_URI = 'https://www.googleapis.com/geolocation/v1/geolocate?key=';
@@ -15,6 +16,7 @@ function SessionCreate() {
     const [priceLevel, setPriceLevel] = useState('$$');
     const [currentLocation, setCurrentLocation] = useState({});
     const [center, setCenter] = useState({});
+    let history = useHistory();
 
     useEffect(() => {
         console.log("useEffect items loaded");
@@ -29,6 +31,12 @@ function SessionCreate() {
             manual: true
         }
     )
+
+    React.useEffect(() => {
+        if (data && data['success'] === true) {
+            history.push('/room')
+        }
+    }, [data]);
 
     function success(position) {
         console.log('Geolocation received!');

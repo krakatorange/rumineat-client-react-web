@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 
   scope :api do
     scope :v1 do
+      get 'session', to: 'session#details'
       post 'create', to: 'session#create'
       post 'join', to: 'session#join'
     end
