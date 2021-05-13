@@ -14,6 +14,7 @@ class SessionController < ApplicationController
     data[:place_count] = @session.places.count
     data[:done_fetching] = @session.max_places.present?
     data[:users] = @session.users.map{|x|x.username}
+    data[:access_code] = @session.access_code
     render json: data, status: :ok
   end
 

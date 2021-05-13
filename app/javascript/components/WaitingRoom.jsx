@@ -3,7 +3,8 @@ import * as React from "react";
 import {Box, Button, Heading, Table, TableBody, TableCell, TableHeader, TableRow, TextArea} from "grommet";
 import {useLocation} from "react-router-dom";
 import useAxios from 'axios-hooks'
-import {API_PATH} from "./Env";
+import {API_PATH, API_URL} from "./Env";
+import {CopyToClipboard} from "react-copy-to-clipboard/lib/Component";
 function useQuery() {
     return new URLSearchParams(useLocation().search);
 }
@@ -13,6 +14,7 @@ export function WaitingRoom(){
     const [userCount, setUserCount] = useState(0)
     const [placeCount, setPlaceCount] = useState(0)
     const [users, setUsers] = useState([])
+    const [accessCode, setAccessCode] = useState([])
     const [{ data, loading, requestError, response}, sessionData] = useAxios({
             url: `${API_PATH}/session`,
             method: 'GET',
@@ -29,8 +31,24 @@ export function WaitingRoom(){
             setUserCount(data['user_count'])
             setPlaceCount(data['place_count'])
             setUsers(data['users'])
+            setAccessCode(data['access_code'])
         }
     }, [data]);
+
+    function shareNavigator(){
+        if (navigator.share) {
+            console.log('Navigator available');
+            navigator.share({
+                title: 'Rumineat',
+                text: 'Join this decision',
+                url: `${API_URL}/join?uuid=${accessCode}`,
+            })
+                .then(() => console.log('Successful share'))
+                .catch((error) => console.log('Error sharing', error));
+        } else {
+            console.log('No navigator');
+        }
+    };
 
     function buildUsers() {
         if (users.length > 0) {
@@ -59,6 +77,34 @@ export function WaitingRoom(){
             )
         }
         return (null)
+    }
+
+    let shareComponent = (null);
+    if (accessCode != null) {
+        if (navigator.share) {
+            shareComponent = (<Button
+                onClick={(event) => {
+                    shareNavigator()
+                }}
+                label="Share"
+            />)
+        } else {
+            shareComponent = (<CopyToClipboard
+                text={`${API_URL}/join?uuid=${accessCode}`}
+                onCopy={() => {
+                    console.log('copied to clipboard')
+                }}>
+                        <span>
+                            <Button
+                                className={"center"}
+                                label="Share"
+                                color={"accent-3"}
+                                primary={true}
+                                fill={true}
+                            />
+                        </span>
+            </CopyToClipboard>)
+        }
     }
 
 
@@ -102,7 +148,7 @@ export function WaitingRoom(){
                     {"start session button"}
                 </Box>
                 <Box background="light-1" pad={"xsmall"} align={"center"} basis={"1/2"} flex="grow" fill={true}>
-                    {"share component"}
+                    {shareComponent}
                 </Box>
             </Box>
         </Box>
