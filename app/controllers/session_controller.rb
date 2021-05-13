@@ -10,9 +10,10 @@ class SessionController < ApplicationController
   def details
     data = {}
     @session = current_user.session
-    data[:users] = @session.users.count
-    data[:places] = @session.places.count
-    data[:places_fetched] = false # TODO
+    data[:user_count] = @session.users.count
+    data[:place_count] = @session.places.count
+    data[:done_fetching] = @session.max_places.present?
+    data[:users] = @session.users.map{|x|x.username}
     render json: data, status: :ok
   end
 
@@ -41,6 +42,8 @@ class SessionController < ApplicationController
         logger.error("Error creating session #{_e}")
       end
     end
+
+    PlaceFetcherJob.perform_now(@session.id)
 
     session[:user_id] = @user.id if success
     render json: {

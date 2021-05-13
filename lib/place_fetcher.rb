@@ -1,12 +1,13 @@
 require 'httparty'
 require 'logger'
 
-class PlaceFetcher
+module PlaceFetcher
   extend self
-  GOOGLE_API_KEY = Rails.application.credentials.google.api_key
-  MAX_DECISIONS = 20
+  GOOGLE_API_KEY = Rails.application.credentials.dig(:google, :api_key)
+  MAX_PLACES = 20
   BASE_URI = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json'.freeze
   BASE_PHOTO_URI = 'https://maps.googleapis.com/maps/api/place/photo?photoreference='.freeze
+  IGNORED_TAGS = %w(PLACE_OF_INTEREST ESTABLISHMENT)
 
   def get_places(session, count=0, next_page_token=nil)
     latitude = session.latitude || '39.2842392'
@@ -14,7 +15,7 @@ class PlaceFetcher
     radius = session.range_in_meters
     price_level = session.price_level || nil
 
-    response = HTTParty.get(BASE_URL, query: enrich_parameters(latitude, longitude, radius, next_page_token, price_level))
+    response = HTTParty.get(BASE_URI, query: enrich_parameters(latitude, longitude, radius, next_page_token, price_level))
     next_page_token = response['next_page_token']
     response.fetch('results', []).each do |place_data|
       if build_place(session, place_data)
@@ -22,12 +23,11 @@ class PlaceFetcher
       else
         Rails.logger.error("Failed to save place #{place_data}")
       end
-      break if count == MAX_DECISIONS
+      break if count == MAX_PLACES
     end
 
-    if next_page_token.nil? || count >= MAX_DECISIONS
-      session.max_decisions = count
-      session.max_decisions = count
+    if next_page_token.nil? || count >= MAX_PLACES
+      session.max_places = count
       if session.save
         Rails.logger.debug('Successfully updated session max decision count')
         return
