@@ -1,7 +1,9 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import GoogleMapReact from 'google-map-react';
-import { Button, Header, Menu, RadioButtonGroup, RangeInput, Box, Stack } from 'grommet';
-import { CaretDown } from 'grommet-icons';
+import { Button, RadioButtonGroup, RangeInput, Box, Stack } from 'grommet';
+import { base, CaretDown } from 'grommet-icons';
+import { deepMerge } from "grommet-icons/utils";
+import styled, { css, ThemeProvider } from "styled-components";
 import useAxios from "axios-hooks";
 import {API_PATH} from "./Env";
 import {useHistory} from "react-router";
@@ -12,16 +14,37 @@ const GOOGLE_MAPS_BASE_URI = 'https://www.googleapis.com/geolocation/v1/geolocat
 function SessionCreate() {
     const [range, setRange] = useState(3);
     const [buttonDisabled, setButtonDisabled] = useState(false);
-    const [rangeValue, setRangeValue] = useState(5);
+    const [rangeValue, setRangeValue] = useState(3);
     const [priceLevel, setPriceLevel] = useState('$$');
     const [currentLocation, setCurrentLocation] = useState({});
     const [center, setCenter] = useState({});
     let history = useHistory();
 
+    const caretTheme = deepMerge(base, {
+        icon: {
+            extend: css`
+                fill: #7D4CDB;
+                stroke: #7D4CDB;
+                width: 48px;
+                height: 48px
+            `
+        }
+    });
+
+    const CaretContainer = styled.div`
+        > * { margin-top: -21px; }
+    `;
+
     useEffect(() => {
         console.log("useEffect items loaded");
         getLocation();
     }, [currentLocation, center]);
+
+    useEffect(() => {
+        if (data && data['success'] === true) {
+            history.push('/room')
+        }
+    }, [data]);
 
     const [{ data, loading, requestError, response}, createSessionRequest] = useAxios({
             url: `${API_PATH}/create`,
@@ -31,12 +54,6 @@ function SessionCreate() {
             manual: true
         }
     )
-
-    React.useEffect(() => {
-        if (data && data['success'] === true) {
-            history.push('/room')
-        }
-    }, [data]);
 
     function success(position) {
         console.log('Geolocation received!');
@@ -96,9 +113,36 @@ function SessionCreate() {
     };
 
     function InitMap(map, maps) {
+        var radiusCircle;
+
+        // Add the circle for this city to the map.
+        radiusCircle = new maps.Circle({
+            strokeColor: "#7D4CDB",
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: "#7D4CDB",
+            fillOpacity: 0.35,
+            map,
+            center: { lat: map.getCenter().lat(), lng: map.getCenter().lng() },
+            radius: rangeValue * 1609.34,
+        });
+
         maps.event.addListener(map,'center_changed', function() {
             setCenter({ lat: map.getCenter().lat(), lng: map.getCenter().lng() });
             //console.log(center);
+            
+            // Remove previous radius circle and add new radius cicle
+            radiusCircle.setMap(null);
+            radiusCircle = new maps.Circle({
+                strokeColor: "#7D4CDB",
+                strokeOpacity: 0.8,
+                strokeWeight: 2,
+                fillColor: "#7D4CDB",
+                fillOpacity: 0.35,
+                map,
+                center: { lat: map.getCenter().lat(), lng: map.getCenter().lng() },
+                radius: rangeValue * 1609.34,
+            });
         });
     };
 
@@ -113,13 +157,17 @@ function SessionCreate() {
                         bootstrapURLKeys={{ key: GOOGLE_MAPS_API_KEY }}
                         defaultCenter={{ lat: 40.756795, lng: -73.954298 }}
                         center={{lat: currentLocation.lat, lng: currentLocation.lng}}
-                        defaultZoom={10}
+                        defaultZoom={13}
                         yesIWantToUseGoogleMapApiInternals
                         onGoogleApiLoaded={({ map, maps }) => InitMap(map, maps)}
                     >
                     </GoogleMapReact>    
-                </div>    
-                <CaretDown color='brand' />
+                </div>
+                <ThemeProvider theme={caretTheme}>
+                    <CaretContainer>
+                        <CaretDown />
+                    </CaretContainer>
+                </ThemeProvider>
             </Stack>
 
 
@@ -148,7 +196,7 @@ function SessionCreate() {
                 <Button
                     label={buttonDisabled ? 'Loading...' : "Start a group decision"}
                     disabled={buttonDisabled}
-                    onClick={() => { 
+                    onClick={() => {
                         createSessionRequest({
                             data: {
                                 latitude: center.lat,
