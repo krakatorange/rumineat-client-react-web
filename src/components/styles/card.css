@@ -1,0 +1,361 @@
+.swipe-wrapper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.swipe-wrapper .go-button{
+    box-shadow: 0px 10px 30px #00000029;
+    border: 2px solid #F26070;
+    border-radius: 12px;
+    padding: 20px;
+    font-weight: bold;
+    font-size: 17px;
+    color: #F26070;
+    background: transparent;
+    max-width: 300px;
+    box-sizing: border-box;
+    white-space: nowrap;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+.swiper-container {
+    width: 100%;
+    height: 100%;
+}
+
+.swiper-container.swipe {
+    position: absolute;
+    top: 0;
+    background: #FFFFFF;
+    padding-top: 15px;
+}
+
+.swipper-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #00000080;
+    z-index: 1;
+}
+
+.swipper-overlay .content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #FFFFFF;
+    max-width: 400px;
+    text-align: right;
+}
+
+.swipper-overlay .content.left {
+    text-align: left;
+}
+
+.swipper-overlay .content .heading {
+    font-size: 20px;
+}
+
+.swipper-overlay .content .description {
+    display: block;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    overflow: hidden;
+    font-size: 17px;
+    max-height: 3.2em;
+    line-height: 1.1em;
+}
+
+.swipper-overlay .content .button {
+    display: inline-block;
+    padding: 10px 40px;
+    background: #FFFFFF;
+    color: #000000;
+    font-weight: bold;
+    font-size: 15px;
+    border-radius: 12px;
+    margin-top: 12px;
+    cursor: pointer;
+}
+
+.result-stack {
+    width: 100vw;
+    height: 50vh;
+    position: relative;
+    margin-top: 4%;
+    margin-bottom: 10%;
+}
+
+.swipe-wrapper .stack {
+    width: 100%;
+    position: absolute;
+    top: 100px;
+    padding: 0px 15px;
+    box-sizing: border-box;
+}
+.ads-div{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: blueviolet;
+    z-index: 10;
+
+}
+
+.swipe-wrapper .stack.result {
+    top: 70px;
+}
+
+.swipe-wrapper .swipe-heading {
+    max-width: 430px;
+    margin: auto;
+}
+
+.swipe-wrapper .swipe-heading h1 {
+    color: #25275E;
+    padding-left: 15px;
+    margin-bottom: 10px;
+    font-size: 36px;
+    font-weight: bold;
+    letter-spacing: 0;
+}
+
+.swipe-wrapper .swipe-heading h2 {
+    color: #25275E;
+    padding-left: 30px;
+    margin-bottom: 10px;
+    margin-top: 25px;
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: 0;
+}
+
+.swipe-wrapper .swipe-heading span{
+    color: #000000;
+    opacity: 0.78;
+    padding-left: 17px;
+    font-size: 16px;
+    letter-spacing: 0;
+}
+
+.swipe-wrapper .swipe-footer {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 50px;
+}
+
+.swipe-footer .swipe-actions {
+    display: flex;
+    justify-content: center;
+    margin: auto;
+    border-radius: 40px;
+    background-color: #F8F8F8;
+    padding: 15px;
+}
+
+.swipe-footer .swipe-actions .dislike {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    width: 50px;
+    border-radius: 30px;
+    margin-right: 5px;
+    background-color: #F26070;
+    cursor: pointer;
+}
+.swipe-footer .swipe-actions .like {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    width: 50px;
+    border-radius: 30px;
+    margin-left: 5px;
+    background-color: #6AEDA1;
+    cursor: pointer;
+}
+
+.card {
+    max-width: 200px;
+    top: 0;
+    left: 15px;
+    right: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 445px;
+    list-style: none;
+    position: absolute;
+    box-sizing: border-box;
+    cursor: default;
+    background-color: #FCFCFC;
+    border-radius: 20px;
+    padding: 15px;
+}
+
+.card::after {
+    content: "";
+    height: 50px;
+    max-width: 400px;
+    padding: 15px;
+    position: absolute;
+    left: 15px;
+    right: 15px;
+    bottom: -50px;
+    background: transparent;
+}
+
+.card.first-card {
+    max-width: 400px;
+}
+
+.card.second-card {
+    height: 470px;
+    max-width: 350px;
+    left: 35px;
+    right: 35px;
+}
+
+.card.third-card {
+    height: 495px;
+    max-width: 300px;
+    left: 60px;
+    right: 60px;
+}
+
+.card.first-card, .card.second-card, .card.third-card {
+    box-shadow: 0px 17px 30px #00000021;
+}
+
+.card.second-card::after, .card.third-card::after{
+    content: unset;
+    height: 0px;
+}
+
+.result-card {
+    top: 10% !important;
+}
+.card .card-image {
+    border-radius: 20px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100%;
+    height: 72vw;
+    max-height: 280px;
+}
+
+.card .card-details {
+    padding-left: 8px;
+    padding-bottom: 5px;
+    height: calc(100% - 77vw);
+    min-height: 127px;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-details .more-info::-webkit-scrollbar {
+    display: none;
+}
+
+.card-details .more-info {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    -ms-overflow-style: none;  
+    scrollbar-width: none; 
+}
+
+.card .card-details h2 {
+    color: #25275E;
+    margin: 15px 0px 10px;
+    font-size: 30px;
+    line-height: 30px;
+    font-weight: normal;
+    letter-spacing: 0;
+}
+
+.card-details .values {
+    display: flex;
+    justify-content: space-between;
+}
+
+.card-details .values .address {
+    display: flex;
+    align-items: flex-start;
+    color: #000000;
+    font-size: 13px;
+    line-height: 20px;
+    opacity: 0.76;
+    letter-spacing: 0;
+    margin-right: 10px;
+}
+
+.card-details .values .rating-price {
+    display: flex;
+    align-items: flex-start;
+}
+
+.card-details .values .rating-price span {
+    color: #000000;
+    font-size: 13px;
+    opacity: 0.76;
+    letter-spacing: 0;
+    margin-right: 15px;
+}
+
+.result_container {
+    width: 300px;
+    height: 350px;
+    list-style: none;
+    background: #fff;
+    border-radius: 3px;
+    top: 0;
+    left: 0;
+    box-shadow: 0 0 2px rgba(0,0,0,.2), 1px 1px 1px rgba(0,0,0,.2);
+    text-align: center;
+    color: black;
+    border: 10px solid #ECECEC;
+    box-sizing: border-box;
+    cursor: default;
+
+    margin: auto;
+    right: 0;
+    bottom: 0;
+}
+.swiper-progress{
+    width: 50px;
+    height: 50px;
+}
+.progress-wrapper{
+    display: flex;
+    justify-content: center;
+    margin: auto;
+    width: 100%;
+    max-width: 480px;
+   
+   
+}
+.container {
+    padding: 2px 16px;
+}
+.swipe-progess{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.hidden {
+    display: none !important;
+}

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="14.118" height="14.666" viewBox="0 0 14.118 14.666">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.5" x2="0.5" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#e4439b"/>
+      <stop offset="0.464" stop-color="#d922d5"/>
+      <stop offset="1" stop-color="#c004f9"/>
+    </linearGradient>
+  </defs>
+  <path id="Icon_map-location-arrow" data-name="Icon map-location-arrow" d="M11.373,16.247,9.114,9.5H1.773L15.891,1.581Z" transform="translate(-1.773 -1.581)" fill="url(#linear-gradient)"/>
+</svg>

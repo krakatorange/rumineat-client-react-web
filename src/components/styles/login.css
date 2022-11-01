@@ -1,0 +1,27 @@
+.login-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #ffff 0% 0% no-repeat padding-box;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 4999;
+}
+.facebook-button {
+  width: 170px;
+  margin-top: 10px;
+  background: #826aed;
+  text-align: center;
+  padding: 13px 20px;
+  font-size: 14px;
+  text-decoration: none;
+  color: aliceblue;
+}
+.facebook-button:hover {
+  opacity: 0.7;
+}

@@ -1,0 +1,52 @@
+.stats-table{
+    margin-left: 20px;
+    margin-right: 20px;
+    
+}
+.table-row{
+    width:100%;
+    height: 78px;
+    background-color:   #F8F8F8;
+    display: flex;
+    flex-direction: row;
+    margin-right: "20%";
+    margin-left: "20%";
+    justify-content: center;
+    
+    
+}
+.table-heading{
+  align-content: center;
+  align-items: center;
+  align-self:center;
+  margin-left: 40px;
+    width: 50%;
+    height: 50%;
+    text-align: left;
+    font-size: "17px/24px";
+    font-weight: 600;   
+}
+.name{
+    font-weight: normal;
+}
+.frequancy{
+    font-weight: bold;
+}
+.table-row-background{
+    width:100%;
+    height: 78px;
+    background-color:   #FFFF;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+}
+.back-to-home-button{
+    font-size: "14px/24px";
+}
+.stats-heading{
+    text-align: left;
+    font-family:'Poppins';
+    font-size: "14px/24px";
+    font-weight: bold;
+}
